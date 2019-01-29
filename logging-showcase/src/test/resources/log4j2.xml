@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration strict="true" monitorInterval="15">
+
+    <Appenders>
+    
+        <!-- console appender which will use the Pattern Layout to generate a log message output -->
+        <Appender type="Console" name="console">
+            <Layout type="PatternLayout"
+                pattern="%date{DEFAULT} | %message%n" />
+        </Appender>
+
+        <!-- 
+            File appender to demonstrate the combination of SizeBasedTriggeringPolicy and CronTriggeringPolicy.
+            The file name contains a time pattern in UTC.
+        -->
+        <RollingFile name="rollingFile"
+            filePattern="target/logs/showcase-%d{yyyyMMdd-HHmmss}{UTC}.log">
+            <Layout type="PatternLayout" pattern="%date{DEFAULT} | %message%n" />
+            <Policies>
+                <!-- roll over every 30 seconds or every 100KB; this is only reasonable for test purpose -->
+                <SizeBasedTriggeringPolicy size="100KB" />
+                <CronTriggeringPolicy schedule="0,30 * * * * ? *"/>
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Logger name="de.frvabe" level="debug" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="rollingFile" />
+        </Logger>
+        <Root level="warn">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+
+</Configuration>
